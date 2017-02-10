@@ -18,11 +18,11 @@ class NeuralNetwork
 {
     private $outputNeurons = 1; // How many neurons are on the output layer
     private $inputNeurons = 2; // How many neurons are on the input layer
-    private $hiddenNeurons = 4; // How many neurons are on each hidden layer
+    private $hiddenNeurons = 5; // How many neurons are on each hidden layer. Alternative formula to calculate: setCount / (a * (inputNeurons + outputNeurons)) where a is between 2-20
 
-    private $hiddenLayers = 3; // How many hidden layers there are.
+    private $hiddenLayers = 1; // How many hidden layers there are.
 
-    private $setCount = 21; // How many training sets we have
+    private $setCount = 29; // How many training sets we have
 
     private $inputs = []; // The inputs we are training with
 
@@ -381,6 +381,14 @@ $i = [
     [0.1,0.03984064],
     [0.1,0.03584064],
     [0.1,0.03084064],
+    [0.3333,0.142857143],
+    [0.3333,0.138484974],
+    [0.3333,0.128379593],
+    [0.3333,0.131754042],
+    [0.3333,0.125925553],
+    [0.3333,0.117956521],
+    [0.3333,0.134852673],
+    [0.3333,0.160028165],
 ];
 
 /*
@@ -408,20 +416,28 @@ $t = [
     [1],
     [1],
     [1],
+    [0],
+    [0],
+    [1],
+    [1],
+    [1],
+    [1],
+    [0],
+    [0],
 ];
 
 $iteration = 10000;
 
 echo '<ul>';
 
-for($loop = 0; $loop < 20; $loop++)
+for($loop = 0; $loop < 5; $loop++)
 {
     $nn = new NeuralNetwork($i, $t, $iteration);
 
     echo '<li>Iterations: ' . $iteration . '<br>';
 
     $nn->solve(
-        [0.1, 0.028160643], 100
+        [0.3333, 0.833333333], 100
     );
 
     echo '</li><hr>';
