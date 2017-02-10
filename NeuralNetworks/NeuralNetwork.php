@@ -37,9 +37,9 @@ class NeuralNetwork
 
     /**
      * NeuralNetwork constructor.
-     * @param $inputs NeuralNetwork A set of n=inputNeurons inputs which equal x=outputNeurons outputs
-     * @param $targets NeuralNetwork A set of expected answers
-     * @param $iterations NeuralNetwork override how many iterations we should use
+     * @param $inputs array A set of n=inputNeurons inputs which equal x=outputNeurons outputs
+     * @param $targets array A set of expected answers
+     * @param $iterations int override how many iterations we should use
      */
     public function __construct($inputs, $targets, $iterations)
     {
@@ -54,7 +54,7 @@ class NeuralNetwork
     /**
      * A sigmoid function calculator
      * @param $x
-     * @param bool $derivative NeuralNetwork when this is true, take the derivative of sigmoid
+     * @param bool $derivative boolean when this is true, take the derivative of sigmoid
      * @return float|int
      */
     private function sigmoid($x, $derivative = false)
