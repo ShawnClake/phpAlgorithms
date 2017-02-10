@@ -57,6 +57,13 @@ $outputs = []; // What the neural network calculates as an output
 $iterations = 10000;
 $learningRate = 0.7;
 
+/**
+ * Sigmoid function calculator, also does derivatives
+ * Used as an activation function
+ * @param $x
+ * @param bool $deriv
+ * @return float|int
+ */
 function sigmoid($x, $deriv = false)
 {
 	if ($deriv)
@@ -65,6 +72,17 @@ function sigmoid($x, $deriv = false)
     return 1 / (1 + exp(-$x));
 }
 
+/**
+ * Runs forward through the algorithm
+ * @param $input
+ * @param $hiddenNeurons
+ * @param $inputNeurons
+ * @param $outputNeurons
+ * @param $hiddens
+ * @param $outputs
+ * @param $weights
+ * @param $hiddenLayers
+ */
 function forwardPropogation($input, $hiddenNeurons, $inputNeurons, $outputNeurons, &$hiddens, &$outputs, $weights, $hiddenLayers)
 {
 	// Adds bias neuron to input layer
@@ -111,6 +129,20 @@ function forwardPropogation($input, $hiddenNeurons, $inputNeurons, $outputNeuron
 	}
 }
 
+/**
+ * A cycle of backward propagation
+ * @param $hiddenNeurons
+ * @param $inputNeurons
+ * @param $outputNeurons
+ * @param $outputs
+ * @param $inputs
+ * @param $hiddens
+ * @param $learningRate
+ * @param $weights
+ * @param $targets
+ * @param bool $print_error
+ * @param $hiddenLayers
+ */
 function train_network($hiddenNeurons, $inputNeurons, $outputNeurons, $outputs, $inputs, $hiddens, $learningRate, &$weights, $targets, $print_error = false, $hiddenLayers)
 {
 	$delta_hiddens = [];
@@ -193,6 +225,21 @@ function train_network($hiddenNeurons, $inputNeurons, $outputNeurons, $outputs, 
 
 }
 
+/**
+ * Trains the network
+ * @param $inputs
+ * @param $targets
+ * @param $iterations
+ * @param $setCount
+ * @param $hiddenNeurons
+ * @param $inputNeurons
+ * @param $outputNeurons
+ * @param $hiddens
+ * @param $outputs
+ * @param $weights
+ * @param $learningRate
+ * @param $hiddenLayers
+ */
 function train($inputs, $targets, $iterations, $setCount, $hiddenNeurons, $inputNeurons, $outputNeurons, &$hiddens, &$outputs, &$weights, $learningRate, $hiddenLayers)
 {
 	for($i = 0; $i < $iterations; $i++)
@@ -220,7 +267,14 @@ function train($inputs, $targets, $iterations, $setCount, $hiddenNeurons, $input
 	
 }
 
-
+/**
+ * Creates the inital weight array with randomized values
+ * @param $hiddenNeurons
+ * @param $inputNeurons
+ * @param $outputNeurons
+ * @param $weights
+ * @param $hiddenLayers
+ */
 function initWeights($hiddenNeurons, $inputNeurons, $outputNeurons, &$weights, $hiddenLayers)
 {
 	for($i = 0; $i < $hiddenNeurons; $i++)
