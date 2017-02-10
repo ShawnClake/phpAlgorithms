@@ -1,12 +1,26 @@
 <?php namespace Neuralnetworks;
 
+/**
+ * Neural Network by Shawn Clake
+ * Class NeuralNetwork
+ * Neural Network is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/phpAlgorithms
+ * @link http://shawnclake.com/
+ * @link http://shawnclake.com/blog
+ *
+ * @license https://github.com/ShawnClake/phpAlgorithms/blob/master/LICENSE MIT
+ *
+ * @package Neuralnetworks
+ */
 class NeuralNetwork
 {
-    private $outputNeurons = 1;
-    private $inputNeurons = 2;
-    private $hiddenNeurons = 4;
+    private $outputNeurons = 1; // How many neurons are on the output layer
+    private $inputNeurons = 2; // How many neurons are on the input layer
+    private $hiddenNeurons = 4; // How many neurons are on each hidden layer
 
-    private $hiddenLayers = 3;
+    private $hiddenLayers = 3; // How many hidden layers there are.
 
     private $setCount = 21; // How many training sets we have
 
@@ -15,12 +29,18 @@ class NeuralNetwork
     private $targets = []; // What we are training with; the expected result
 
     private $weights = []; // Weights array. Each outer array is for a layer. [Layer][HigherLevelNode][LowerLevelNode] = WeightValue
-    private $hiddens = []; // What the narual network calculates at each hidden neuron [Layer][WhichNode] = ValueAtNode
+    private $hiddens = []; // What the neural network calculates at each hidden neuron [Layer][WhichNode] = ValueAtNode
     private $outputs = []; // What the neural network calculates as an output
 
-    private $iterations = 10000;
-    private $learningRate = 0.7;
+    private $iterations = 10000; // How many iterations we run over the training set to train the neural network
+    private $learningRate = 0.7; // A modifier to reduce drastic (and sometimes incorrect) changes to weights
 
+    /**
+     * NeuralNetwork constructor.
+     * @param $inputs NeuralNetwork A set of n=inputNeurons inputs which equal x=outputNeurons outputs
+     * @param $targets NeuralNetwork A set of expected answers
+     * @param $iterations NeuralNetwork override how many iterations we should use
+     */
     public function __construct($inputs, $targets, $iterations)
     {
         $this->inputs = $inputs;
@@ -31,6 +51,12 @@ class NeuralNetwork
         $this->train($this->targets);
     }
 
+    /**
+     * A sigmoid function calculator
+     * @param $x
+     * @param bool $derivative NeuralNetwork when this is true, take the derivative of sigmoid
+     * @return float|int
+     */
     private function sigmoid($x, $derivative = false)
     {
         if ($derivative)
@@ -38,9 +64,13 @@ class NeuralNetwork
         return 1 / (1 + exp(-$x));
     }
 
+    /**
+     * Run a given input set through the neural network and calculate an answer based on current weights
+     * @param $inputSet
+     */
     public function forwardPropagation($inputSet)
     {
-        $this->hiddens = [];
+        $this->hiddens = []; // Reset Hiddens and Outputs array otherwise we get a mem leak from appending bias nodes at the end
         $this->outputs = [];
 
         // Adds bias neuron to input layer
@@ -87,6 +117,12 @@ class NeuralNetwork
         }
     }
 
+    /**
+     * Run backwards through the neural network with the current weights. Alter the weights by going from the expected target back to the input set and calculate errors along the way
+     * @param $inputSet
+     * @param $targets
+     * @param bool $print_error
+     */
     private function trainNetwork($inputSet, $targets, $print_error = false)
     {
         $delta_hiddens = [];
@@ -99,6 +135,7 @@ class NeuralNetwork
 
         // FORMULATING THE NESECARY WEIGHT CHANGES GO BELOW
 
+        // Returns an array of how far off our calculated answer was from our target answer.
         for($i = 0; $i < $this->outputNeurons; $i++)
         {
             $error = $targets[$i] - $this->outputs[$i];
@@ -107,6 +144,7 @@ class NeuralNetwork
 
         $avg_sum = 0;
 
+        // Calculate an error for the weight connections between the output layer and the last hidden layer.
         for($i = 0; $i < $this->hiddenNeurons + 1; $i++)
         {
             $error = 0;
@@ -120,6 +158,8 @@ class NeuralNetwork
         }
 
         // FORMULATING THE NESECARY WEIGHT CHANGES FOR HIDDEN LAYER TO HIDDEN LAYER
+
+        // Calculate an error for each weight connection between hidden layers starting at the last hidden layer and propagating towards the top hidden layer.
         for($i = 0; $i < $this->hiddenLayers - 1; $i++)
         {
             for($j = 0; $j < $this->hiddenNeurons + 1; $j++)
@@ -139,6 +179,8 @@ class NeuralNetwork
 
 
         // APPLYING THE WEIGHT CHANGES GO BELOW
+
+        // Apply the weight change to the weights between the last hidden layer and the output layer
         for($i = 0; $i < $this->outputNeurons; $i++)
         {
             for($j = 0; $j < $this->hiddenNeurons + 1; $j++)
@@ -146,6 +188,7 @@ class NeuralNetwork
 
         }
 
+        // Apply the weight change to the weights between hidden layers starting at the bottom most hidden layer and moving upwards toward the top most hidden layer.
         for($i = 0; $i < $this->hiddenLayers - 1; $i++)
         {
             for($j = 0; $j < $this->hiddenNeurons; $j++)
@@ -158,6 +201,7 @@ class NeuralNetwork
 
         }
 
+        // Apply the weight change to the weights between the top most hidden layer and the input layer
         for($i = 0; $i < $this->hiddenNeurons; $i++)
         {
             for($j = 0; $j < $this->inputNeurons + 1; $j++)
@@ -170,6 +214,11 @@ class NeuralNetwork
 
     }
 
+    /**
+     * Iterates over the training data set n times.
+     * It calculates an answer and then backPropagates through to find how far that answer was and fix it a bit
+     * @param $targets
+     */
     public function train($targets)
     {
         for($i = 0; $i < $this->iterations; $i++)
@@ -200,10 +249,16 @@ class NeuralNetwork
 
     }
 
+    /**
+     * Creates a weights array of dimensions x/y/z = a
+     *      where x is layer, y is higher layer, z is lower layer, and a is the weight between the two neurons
+     * Each weight is randomly generated from the range (-1, 1)
+     */
     private function initWeights()
     {
         $this->weights = [];
 
+        // Randomly generate weights between the input layer and the top most hidden layer
         for($i = 0; $i < $this->hiddenNeurons; $i++)
         {
             for($j = 0; $j < $this->inputNeurons + 1; $j++)
@@ -213,6 +268,7 @@ class NeuralNetwork
             }
         }
 
+        // Randomly generate weights between hidden layers
         for($i = 0; $i < $this->hiddenLayers - 1; $i++)
         {
             for($j = 0; $j < $this->hiddenNeurons; $j++)
@@ -225,6 +281,7 @@ class NeuralNetwork
             }
         }
 
+        // Randomly generate weights between the bottom most hidden layer and the output layer
         for($i = 0; $i < $this->outputNeurons; $i++)
         {
             for($j = 0; $j < $this->hiddenNeurons + 1; $j++)
@@ -235,22 +292,38 @@ class NeuralNetwork
         }
     }
 
+    /**
+     * Returns the answer array
+     * @return array
+     */
     public function getOutputs()
     {
         return $this->outputs;
     }
 
+    /**
+     * Prints the answer array to the screen using a simple JSON encoding
+     */
     public function printOutputs()
     {
         echo json_encode($this->getOutputs()) . '<br><br>';
     }
 
+    /**
+     * Finds the average answer array for the input set over n iterations.
+     * This must retrain the neural network for each iteration and thus this is very costly. Try not to use
+     *  more than 100 iterations.
+     * Also prints the average answers array afterwards
+     * @param $inputs
+     * @param int $iterations
+     */
     public function solve($inputs, $iterations = 1)
     {
         $sum = [];
         $outsize = 0;
         for($i = 0; $i < $iterations; $i++)
         {
+            // Retrains the neural network
             if($i != 0)
             {
                 $this->weights = [];
@@ -260,10 +333,14 @@ class NeuralNetwork
                 $this->train($this->targets);
             }
 
+            // Feeds our input set in question through the neural network to get an answer
             $this->forwardPropagation($inputs);
             $output = $this->getOutputs();
+
             if($i == 0)
                 $outsize = count($output);
+
+            // Calculates the sum for each answer in the answer array.
             for($j = 0; $j < $outsize; $j++)
             {
                 if(!isset($sum[$j]))
@@ -271,12 +348,17 @@ class NeuralNetwork
                 $sum[$j] += $output[$j];
             }
         }
+
+        // Outputs the average answers from the answer array
         echo '<br>Result: <br>';
         for($j = 0; $j < $outsize; $j++)
             echo '<i>Output ' . ($j + 1) . ':</i> ' . ($sum[$j] / $iterations) . '<br>';
     }
 }
 
+/*
+ * Training input set data
+ */
 $i = [
     [0.25,0.14925373],
     [0.125,0.09090909],
@@ -301,6 +383,9 @@ $i = [
     [0.1,0.03084064],
 ];
 
+/*
+ * Training target set data
+ */
 $t = [
     [0],
     [0],
