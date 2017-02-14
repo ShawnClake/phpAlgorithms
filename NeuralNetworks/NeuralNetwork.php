@@ -18,7 +18,7 @@ class NeuralNetwork
 {
     private $outputNeurons = 1; // How many neurons are on the output layer
     private $inputNeurons = 2; // How many neurons are on the input layer
-    private $hiddenNeurons = 5; // How many neurons are on each hidden layer. Alternative formula to calculate: setCount / (a * (inputNeurons + outputNeurons)) where a is between 2-20
+    private $hiddenNeurons = 5; // How many neurons are on each hidden layer. Alternative formula to calculate:
 
     private $hiddenLayers = 1; // How many hidden layers there are.
 
@@ -34,6 +34,8 @@ class NeuralNetwork
 
     private $iterations = 10000; // How many iterations we run over the training set to train the neural network
     private $learningRate = 0.7; // A modifier to reduce drastic (and sometimes incorrect) changes to weights
+
+    public $debugCounter = 0;
 
     /**
      * NeuralNetwork constructor.
@@ -72,6 +74,8 @@ class NeuralNetwork
     {
         $this->hiddens = []; // Reset Hiddens and Outputs array otherwise we get a mem leak from appending bias nodes at the end
         $this->outputs = [];
+
+        $this->debugCounter++;
 
         // Adds bias neuron to input layer
         $inputSet[] = 1;
@@ -223,7 +227,7 @@ class NeuralNetwork
     {
         for($i = 0; $i < $this->iterations; $i++)
         {
-            if($i % 1000 == 0)
+            //if($i % 1000 == 0)
                 //echo "Iteration: " . $i . '<br>';
 
             for($j = 0; $j < $this->setCount; $j++)
@@ -323,6 +327,7 @@ class NeuralNetwork
         $outsize = 0;
         for($i = 0; $i < $iterations; $i++)
         {
+
             // Retrains the neural network
             if($i != 0)
             {
@@ -428,6 +433,8 @@ $t = [
 
 $iteration = 10000;
 
+$debugs = 0;
+
 echo '<ul>';
 
 for($loop = 0; $loop < 5; $loop++)
@@ -440,6 +447,8 @@ for($loop = 0; $loop < 5; $loop++)
         [0.3333, 0.833333333], 100
     );
 
+    $debugs += $nn->debugCounter;
+
     echo '</li><hr>';
 
     $nn = null;
@@ -449,6 +458,6 @@ for($loop = 0; $loop < 5; $loop++)
 
 echo '</ul>';
 
-
+echo '<br><br>' . 'Debug Counter: ' . $debugs . '<br>';
 //$nn->forwardPropagation([0.1, 0.000000064]);
 //$nn->printOutputs();
