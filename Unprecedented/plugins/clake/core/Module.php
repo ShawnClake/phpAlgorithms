@@ -2,27 +2,25 @@
 use App\Provider;
 use App\StaticFactoryTrait;
 
+/**
+ * Class Module
+ *
+ * The core module provider for the unprecedented framework.
+ * Don't remove this module from the framework or your project under any circumstances. It will cause the framework to break.
+ *
+ * @package Clake\Core
+ */
 class Module extends Provider
 {
     use StaticFactoryTrait;
 
-    public $name = "Cheese";
+    public $name = "unpCore";
 
-    public $author = "Shawn";
+    public $author = "Shawn Clake";
 
-    public $description = "Hi whats up";
+    public $description = "The Unprecedented Core module. This should NOT be removed from the framework under any circumstances.";
 
     public $version = "0.0.1";
-
-    public function testMe()
-    {
-        return 'hell no';
-    }
-
-    public function returnData()
-    {
-        return ['this isnt data' => 'or is it?'];
-    }
 
     public function initialize() {}
 }

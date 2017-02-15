@@ -4,20 +4,55 @@ use \App\Classes\Route;
 
 /**
  * Class Kernel
+ *
+ * The Kernel for the Unprecedented framework
+ *
  * @method static Kernel init()
  * @package App
  */
 class Kernel extends StaticFactory
 {
+    /**
+     * Array of all the registered plugins
+     * @var array
+     */
     public $plugins;
 
+    /**
+     * Current requested route object
+     * @var Route
+     */
+    public $route;
+
+    /**
+     * Socket Driver
+     * @var
+     */
+    public $socket;
+
+    /**
+     * Database Driver
+     * @var
+     */
+    public $db;
+
+    /**
+     * Factory function which:
+     *  Generates a plugin listing.
+     *  Initializes application drivers
+     * @return $this
+     */
     public function initFactory()
     {
         $this->generatePluginListing();
+        $this->loadDrivers();
         return $this;
     }
 
-    public function generatePluginListing()
+    /**
+     * Helper function which parses the project to setup a plugin listing
+     */
+    private function generatePluginListing()
     {
         $absolutePath = __DIR__ . '/../plugins/';
 
@@ -40,6 +75,11 @@ class Kernel extends StaticFactory
         }
     }
 
+    /**
+     * Preforms the registration operation on the project.
+     *  Plugins
+     *  Modules
+     */
     public function register()
     {
         foreach($this->plugins as $plugin)
@@ -49,6 +89,10 @@ class Kernel extends StaticFactory
 
     }
 
+    /**
+     * Preforms the boot operation on the project.
+     *  Plugins
+     */
     public function boot()
     {
         foreach($this->plugins as $plugin)
@@ -58,13 +102,30 @@ class Kernel extends StaticFactory
         Provider::boot();
     }
 
+    /**
+     * Creates a route object for the current request
+     */
     public function route()
     {
         $uri = $this->getUri();
 
         $route = Route::make($uri);
+
+        $this->route = $route;
     }
 
+    /**
+     * Loads the drivers selected in the config
+     */
+    public function loadDrivers()
+    {
+
+    }
+
+    /**
+     * Helper object for grabbing the current uri
+     * @return string
+     */
     private function getUri()
     {
         $uri = urldecode(

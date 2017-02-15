@@ -227,7 +227,7 @@ abstract class Provider extends ModuleMetaData
 /**
  * Class ModuleMetaData
  * Provides a struct like object for use when loading and using modules
- * @package Clake\UserExtended\Classes
+ * @package App
  */
 class ModuleMetaData
 {

@@ -10,7 +10,7 @@
  * Any functions inside of ClassD which you desire to be factory compatible must have a function name that ends in 'Factory'
  * However when utilizing the factory, don't write the word 'Factory' as you saw in the example above.
  *
- * @package Clake\UserExtended\Classes
+ * @package App
  */
 class StaticFactory
 {
@@ -19,7 +19,7 @@ class StaticFactory
 
 /**
  * Class StaticFactoryTrait
- * @package Clake\UserExtended\Classes
+ * @package App
  */
 trait StaticFactoryTrait
 {
