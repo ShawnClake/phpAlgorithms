@@ -1,5 +1,7 @@
 <?php namespace App;
 
+use \App\Classes\Route;
+
 /**
  * Class Kernel
  * @method static Kernel init()
@@ -44,6 +46,7 @@ class Kernel extends StaticFactory
         {
             $plugin->register();
         }
+
     }
 
     public function boot()
@@ -55,7 +58,20 @@ class Kernel extends StaticFactory
         Provider::boot();
     }
 
+    public function route()
+    {
+        $uri = $this->getUri();
 
+        $route = Route::make($uri);
+    }
 
+    private function getUri()
+    {
+        $uri = urldecode(
+            parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
+        );
+
+        return $uri;
+    }
 
 }

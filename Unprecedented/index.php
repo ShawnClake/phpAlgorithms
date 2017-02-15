@@ -6,7 +6,11 @@ $loader = new App\Autoloader();
 $loader->addPlugins();
 $loader->addProviders();
 
-$offset_path = '/Projects/phpAlgorithms/Unprecedented';
+$app = App\App::make();
+
+$app->route();
+
+/*$offset_path = '/Projects/phpAlgorithms/Unprecedented';
 
 $uri = urldecode(
     substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen($offset_path))
@@ -14,7 +18,9 @@ $uri = urldecode(
 
 echo $uri  . '<br>';
 
-$app = App\App::make();
+
+
+echo path_root();*/
 
 //$class = new App\StaticFactory();
 
