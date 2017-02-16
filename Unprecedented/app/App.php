@@ -1,5 +1,7 @@
 <?php namespace App;
 
+use App\Theme\Theme;
+
 /**
  * Class App
  *
@@ -14,21 +16,26 @@ class App extends StaticFactory
 
     /**
      * Kernel
-     * @var \App\Kernel
+     * @var Kernel
      */
     public static $kernel;
 
     /**
      * Helpers
-     * @var
+     * @var Helpers
      */
     public static $helpers;
 
     /**
      * Autoloader
-     * @var
+     * @var Autoloader
      */
     public static $autoloader;
+
+    /**
+     * @var Theme
+     */
+    public static $theme;
 
     /**
      * Factory function which handles adding in helpers and starting up the kernel

@@ -1,5 +1,7 @@
 <?php namespace App\Classes;
 
+use App\Traits\MagicGetSet;
+
 /**
  * Class Meta
  *
@@ -10,5 +12,5 @@
  */
 class Meta
 {
-
+    use MagicGetSet;
 }
