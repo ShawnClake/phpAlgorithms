@@ -6,7 +6,7 @@ namespace App\Helpers {
 
     /**
      * Class Base
-     * @method static Base config
+     * @method static Base config()
      * @package App\Helpers
      */
     class Base extends StaticFactory

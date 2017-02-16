@@ -39,6 +39,7 @@ class Route extends StaticFactory
     /**
      * Factory function for resolving a route
      * @param $uri
+     * @return $this
      */
     public function makeFactory($uri)
     {
@@ -51,6 +52,7 @@ class Route extends StaticFactory
 
     /**
      * Helper function for creating the destination object from the resolved route
+     * @return int
      */
     public function destination()
     {
@@ -58,7 +60,12 @@ class Route extends StaticFactory
         foreach(App::$kernel->plugins as $plugin)
         {
             if($handler = $this->injector($plugin))
-                return $handler;
+            {
+                $this->destination['type'] = 'plugin';
+                $this->destination['response'] = RoutingResponse::make($handler, 'plugin');
+                return $this->destination['response'];
+            }
+
         }
 
         // 2nd Priority - Explicit module overrides
@@ -67,7 +74,12 @@ class Route extends StaticFactory
             $module = $module->instance;
 
             if($handler = $this->injector($module))
-                return $handler;
+            {
+                $this->destination['type'] = 'module';
+                $this->destination['response'] = RoutingResponse::make($handler, 'module');
+                return $this->destination['response'];
+            }
+
         }
 
         // 3rd Priority - Found route in a plugins api folder
@@ -93,14 +105,24 @@ class Route extends StaticFactory
                 if($resolved != $name::$route)
                     continue;
 
-                return new $name();
+                $this->destination['type'] = 'api';
+                $this->destination['response'] = RoutingResponse::make(new $name(), 'api');
+                return $this->destination['response'];
             }
 
         }
 
         // 4th Priority - Must be a regular page then
+        $this->destination['type'] = 'page';
+        $this->destination['response'] = RoutingResponse::make(PageBuilder::make(Page::make($this->resolved)), 'page');
+        return $this->destination['response'];
     }
 
+    /**
+     * Helper function for determining whether plugins or modules are trying to override routing
+     * @param $class
+     * @return bool
+     */
     private function injector($class)
     {
         if(!method_exists($class, 'injectRouting'))
@@ -121,6 +143,24 @@ class Route extends StaticFactory
         $handler = $routing['handler'];
 
         return $class->$handler();
+    }
+
+    /**
+     * Returns the response object
+     * @return mixed
+     */
+    public function getResponse()
+    {
+        return $this->destination['response'];
+    }
+
+    /**
+     * Returns the response type
+     * @return mixed
+     */
+    public function getResponseType()
+    {
+        return $this->destination['type'];
     }
 
 }

@@ -31,7 +31,7 @@ class Autoloader
         $this->loader = require __DIR__ . '/../vendor/autoload.php';
         foreach($this->autoloaders as $name=>$path)
         {
-            $this->loader->add($name, $path);
+            $this->loader->addPsr4($name, $path);
         }
     }
 

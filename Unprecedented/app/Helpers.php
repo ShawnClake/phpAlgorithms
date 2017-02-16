@@ -30,7 +30,9 @@ class Helpers extends StaticFactory
             if(is_file(__DIR__ . '/helpers/' . $helper))
             {
                 $className = substr($helper, 0, strlen($helper) - 4);
-                $name = 'App\Helpers\\' . $className;
+                if($className == 'Base')
+                    continue;
+                $name = '\App\Helpers\\' . $className;
                 self::$helperConfig[$name] = $name::config();
             }
 
