@@ -1,7 +1,6 @@
 <?php namespace App\Theme;
 
 use App\Classes\Meta;
-use App\StaticFactory;
 
 /**
  * Class ThemeBase
@@ -19,5 +18,11 @@ abstract class ThemeBase
      * @var string
      */
     public $path;
+
+    public function __construct()
+    {
+        $reflection = new \ReflectionClass($this);
+        $this->path = $reflection->getNamespaceName();
+    }
 
 }

@@ -45,7 +45,16 @@ class App extends StaticFactory
     {
         $this->exposeHelpers();
         $this->kernelStartup();
+        $this->themeStartup();
         return $this;
+    }
+
+    /**
+     * Helper function for getting the selected theme and starting it up
+     */
+    public function themeStartup()
+    {
+        self::$theme = Theme::getSelectedTheme();
     }
 
     /**
