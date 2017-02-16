@@ -23,23 +23,23 @@ namespace
 
     use App\Helpers\Directories;
 
-    function path_offset()
+    function path_offset($suffix = '')
     {
-        return Directories::$config['directories']['offset'];
+        return Directories::$config['directories']['offset'] . $suffix;
     }
 
-    function path_root()
+    function path_root($suffix = '')
     {
-        return Directories::$config['directories']['base'] . path_offset();
+        return Directories::$config['directories']['base'] . $suffix;
     }
 
-    function path_app()
+    function path_app($suffix = '')
     {
-        return path_root() . '/app';
+        return path_root() . '/app' . $suffix;
     }
 
-    function path_plugins()
+    function path_plugins($suffix = '')
     {
-        return path_root() . '/plugins';
+        return path_root() . '/plugins' . $suffix;
     }
 }

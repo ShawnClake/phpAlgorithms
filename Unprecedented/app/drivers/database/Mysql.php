@@ -7,7 +7,7 @@
  *
  * @package App\Drivers\Database
  */
-class Mysql
+class Mysql implements iDatabase
 {
 
 }

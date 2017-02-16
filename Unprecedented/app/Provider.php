@@ -65,8 +65,8 @@ abstract class Provider extends ModuleMetaData
         if(empty($this->name) || empty($this->author) || empty($this->description) || empty($this->version))
             return false;
 
-        if(!in_array($this->name, self::$settings['enabled']))
-            return false;
+        //if(!in_array($this->name, self::$settings['enabled']))
+            //return false;
 
         $this->registerModule();
     }

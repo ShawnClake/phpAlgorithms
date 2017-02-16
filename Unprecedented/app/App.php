@@ -16,19 +16,19 @@ class App extends StaticFactory
      * Kernel
      * @var \App\Kernel
      */
-    public $kernel;
+    public static $kernel;
 
     /**
      * Helpers
      * @var
      */
-    public $helpers;
+    public static $helpers;
 
     /**
      * Autoloader
      * @var
      */
-    public $autoloader;
+    public static $autoloader;
 
     /**
      * Factory function which handles adding in helpers and starting up the kernel
@@ -46,7 +46,7 @@ class App extends StaticFactory
      */
     public function exposeHelpers()
     {
-        $this->helpers = Helpers::expose();
+        self::$helpers = Helpers::expose();
     }
 
     /**
@@ -54,9 +54,9 @@ class App extends StaticFactory
      */
     public function kernelStartup()
     {
-        $this->kernel = Kernel::init();
-        $this->kernel->register();
-        $this->kernel->boot();
+        self::$kernel = Kernel::init();
+        self::$kernel->register();
+        self::$kernel->boot();
     }
 
     /**
@@ -64,7 +64,7 @@ class App extends StaticFactory
      */
     public function route()
     {
-        $route = $this->kernel->route();
+        $route = self::$kernel->route();
     }
 
 }

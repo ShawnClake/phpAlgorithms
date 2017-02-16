@@ -54,7 +54,7 @@ class Kernel extends StaticFactory
      */
     private function generatePluginListing()
     {
-        $absolutePath = __DIR__ . '/../plugins/';
+        $absolutePath = path_plugins('/');
 
         $authors = array_diff(scandir('plugins'), ['..', '.']);
         foreach($authors as $author)
@@ -99,6 +99,7 @@ class Kernel extends StaticFactory
         {
             $plugin->boot();
         }
+
         Provider::boot();
     }
 
@@ -109,7 +110,7 @@ class Kernel extends StaticFactory
     {
         $uri = $this->getUri();
 
-        $route = Route::make($uri);
+        $route = Route::make($uri)->destination();
 
         $this->route = $route;
     }

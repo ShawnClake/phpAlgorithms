@@ -23,4 +23,19 @@ class Module extends Provider
     public $version = "0.0.1";
 
     public function initialize() {}
+
+    public function testReply()
+    {
+        echo 'Routing found in module';
+    }
+
+    public function injectRouting()
+    {
+        return [
+            'test.test' => [
+                'type' => 'GET',
+                'handler' => 'testReply'
+            ],
+        ];
+    }
 }

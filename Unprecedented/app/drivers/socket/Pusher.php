@@ -7,7 +7,7 @@
  *
  * @package App\Drivers\Sockets
  */
-class Pusher
+class Pusher implements iSocket
 {
 
 }

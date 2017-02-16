@@ -17,6 +17,7 @@ class Plugin
      */
     public function register()
     {
+
         Module::register();
 
     }
@@ -27,6 +28,22 @@ class Plugin
     public function boot()
     {
 
+    }
+
+    public function testResponse()
+    {
+        echo 'Response found in plugin';
+        return 'hi';
+    }
+
+    public function injectRouting()
+    {
+        return [
+            'test.hi' => [
+                'type' => 'GET',
+                'handler' => 'testResponse'
+            ],
+        ];
     }
 
 }
