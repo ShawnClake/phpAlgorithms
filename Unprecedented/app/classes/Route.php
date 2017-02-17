@@ -52,7 +52,7 @@ class Route extends StaticFactory
 
     /**
      * Helper function for creating the destination object from the resolved route
-     * @return int
+     * @return RoutingResponse
      */
     public function destination()
     {

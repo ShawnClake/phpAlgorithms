@@ -17,6 +17,16 @@ class RoutingResponse extends StaticFactory
     {
         $this->response = $response;
         $this->type = $type;
+        return $this;
+    }
+
+    public function render()
+    {
+        if($this->type == 'page' && $this->response instanceof PageBuilder)
+        {
+            /** @var $this->response PageBuilder */
+            return $this->response->render();
+        }
     }
 
 }

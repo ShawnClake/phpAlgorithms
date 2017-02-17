@@ -11,6 +11,8 @@ class Page extends StaticFactory
 {
     public $routing;
 
+    public $content;
+
     public function makeFactory($routing)
     {
         $this->routing = $routing;

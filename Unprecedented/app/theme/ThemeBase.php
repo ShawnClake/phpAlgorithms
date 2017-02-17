@@ -52,6 +52,10 @@ abstract class ThemeBase
         $reflection = new \ReflectionClass($this);
         $this->path = $reflection->getNamespaceName();
         $this->theme_root = path_root('/' . $this->path);
+        /*
+         * I don't want to call generateListings here because this is built on app load. We don't
+         * necessarily need the listings for API/plugin/module overrides. Wait for PageBuilder to call generateListings
+         */
     }
 
     /**
@@ -129,7 +133,7 @@ abstract class ThemeBase
 
     /**
      * @param $layout
-     * @return string
+     * @return array string
      */
     public function getLayout($layout)
     {
@@ -141,7 +145,7 @@ abstract class ThemeBase
 
     /**
      * @param $page
-     * @return string
+     * @return array string
      */
     public function getPage($page)
     {
@@ -153,7 +157,7 @@ abstract class ThemeBase
 
     /**
      * @param $partial
-     * @return string
+     * @return array string
      */
     public function getPartial($partial)
     {
@@ -165,7 +169,7 @@ abstract class ThemeBase
 
     /**
      * @param $snippet
-     * @return string
+     * @return array string
      */
     public function getSnippet($snippet)
     {
@@ -173,6 +177,58 @@ abstract class ThemeBase
             return null;
 
         return file($this->theme_root . '/snippets/' . $snippet);
+    }
+
+    public function layoutsToTwig()
+    {
+        if(empty(self::$layouts))
+            return [];
+
+        $layouts = [];
+        foreach(self::$layouts as $layout)
+        {
+            $layouts['layouts/' . $layout] = file_to_string($this->getLayout($layout));
+        }
+        return $layouts;
+    }
+
+    public function pagesToTwig()
+    {
+        if(empty(self::$pages))
+            return [];
+
+        $pages = [];
+        foreach(self::$pages as $page)
+        {
+            $pages['pages/' . $page] = file_to_string($this->getPage($page));
+        }
+        return $pages;
+    }
+
+    public function partialsToTwig()
+    {
+        if(empty(self::$partials))
+            return [];
+
+        $partials = [];
+        foreach(self::$partials as $partial)
+        {
+            $partials['partials/' . $partial] = file_to_string($this->getPartial($partial));
+        }
+        return $partials;
+    }
+
+    public function snippetsToTwig()
+    {
+        if(empty(self::$snippets))
+            return [];
+
+        $snippets = [];
+        foreach(self::$snippets as $snippet)
+        {
+            $snippets['snippets/' . $snippet] = file_to_string($this->getSnippet($snippet));
+        }
+        return $snippets;
     }
 
 }

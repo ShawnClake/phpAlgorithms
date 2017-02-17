@@ -51,4 +51,9 @@ namespace
     {
         return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS));
     }
+
+    function file_to_string(array $file)
+    {
+        return implode(" ", $file);
+    }
 }
