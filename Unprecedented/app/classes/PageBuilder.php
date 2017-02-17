@@ -43,7 +43,7 @@ class PageBuilder extends StaticFactory
 
     public function assembler()
     {
-        return self::$twig->render('layouts/main.htm');
+        return self::$twig->render('layouts.main.htm', ['name' => false]);
     }
 
     public function processor()

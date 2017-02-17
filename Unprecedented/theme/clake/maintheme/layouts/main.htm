@@ -5,6 +5,10 @@ name: test
 <title>Hi whats up</title>
 </head>
 <body>
-<p>I'm in the body oh yes</p>
+{% if name %}
+<p>I'm in the body oh yes </p>
+{% else %}
+<p>But why not</p>
+{% endif %}
 </body>
 </html>

@@ -187,7 +187,7 @@ abstract class ThemeBase
         $layouts = [];
         foreach(self::$layouts as $layout)
         {
-            $layouts['layouts/' . $layout] = file_to_string($this->getLayout($layout));
+            $layouts['layouts.' . $layout] = file_to_string($this->getLayout($layout));
         }
         return $layouts;
     }
@@ -200,7 +200,7 @@ abstract class ThemeBase
         $pages = [];
         foreach(self::$pages as $page)
         {
-            $pages['pages/' . $page] = file_to_string($this->getPage($page));
+            $pages['pages.' . $page] = file_to_string($this->getPage($page));
         }
         return $pages;
     }
@@ -213,7 +213,7 @@ abstract class ThemeBase
         $partials = [];
         foreach(self::$partials as $partial)
         {
-            $partials['partials/' . $partial] = file_to_string($this->getPartial($partial));
+            $partials['partials.' . $partial] = file_to_string($this->getPartial($partial));
         }
         return $partials;
     }
@@ -226,7 +226,7 @@ abstract class ThemeBase
         $snippets = [];
         foreach(self::$snippets as $snippet)
         {
-            $snippets['snippets/' . $snippet] = file_to_string($this->getSnippet($snippet));
+            $snippets['snippets.' . $snippet] = file_to_string($this->getSnippet($snippet));
         }
         return $snippets;
     }
