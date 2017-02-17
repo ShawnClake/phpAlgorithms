@@ -19,34 +19,66 @@ abstract class ThemeBase
      */
     public $path;
 
+    /**
+     * @var string
+     */
     public $theme_root;
 
+    /**
+     * @var string[]
+     */
     public static $layouts;
 
+    /**
+     * @var string[]
+     */
     public static $pages;
 
+    /**
+     * @var string[]
+     */
     public static $partials;
 
+    /**
+     * @var string[]
+     */
     public static $snippets;
 
+    /**
+     * ThemeBase constructor.
+     */
     public function __construct()
     {
         $reflection = new \ReflectionClass($this);
         $this->path = $reflection->getNamespaceName();
+        $this->theme_root = path_root('/' . $this->path);
     }
 
+    /**
+     *
+     */
     public function generateListings()
     {
-        $this->theme_root = path_root('/' . $this->path);
-
         if(empty(self::$layouts))
             $this->generateLayoutListings($this->theme_root);
 
+        if(empty(self::$pages))
+            $this->generatePageListings($this->theme_root);
+
+        if(empty(self::$partials))
+            $this->generatePartialListings($this->theme_root);
+
+        if(empty(self::$snippets))
+            $this->generateSnippetListings($this->theme_root);
     }
 
-    public function generateLayoutListings($theme_root)
+    /**
+     * @param $theme_root string
+     */
+    private function generateLayoutListings($theme_root)
     {
-        $layouts = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($theme_root . '/layouts', \RecursiveDirectoryIterator::SKIP_DOTS));
+        $layouts = get_files_recursively($theme_root . '/layouts');
+        //$layouts = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($theme_root . '/layouts', \RecursiveDirectoryIterator::SKIP_DOTS));
         foreach($layouts as $name => $layout)
         {
             self::$layouts[] = substr($name, strlen($theme_root . '/layouts') + 1);
@@ -59,33 +91,46 @@ abstract class ThemeBase
         //self::$layouts = array_diff(scandir($theme_root . '/layouts'), ['..', '.']);
     }
 
-    public function generatePageListings($theme_root)
+    /**
+     * @param $theme_root string
+     */
+    private function generatePageListings($theme_root)
     {
-        $pages = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($theme_root . '/pages', \RecursiveDirectoryIterator::SKIP_DOTS));
+        $pages = get_files_recursively($theme_root . '/pages');
         foreach($pages as $name => $page)
         {
             self::$pages[] = substr($name, strlen($theme_root . '/pages') + 1);
         }
     }
-    
-    public function generatePartialListings($theme_root)
+
+    /**
+     * @param $theme_root string
+     */
+    private function generatePartialListings($theme_root)
     {
-        $partials = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($theme_root . '/partials', \RecursiveDirectoryIterator::SKIP_DOTS));
+        $partials = get_files_recursively($theme_root . '/partials');
         foreach($partials as $name => $partial)
         {
             self::$partials[] = substr($name, strlen($theme_root . '/partials') + 1);
         }
     }
-    
-    public function generateSnippetListings($theme_root)
+
+    /**
+     * @param $theme_root string
+     */
+    private function generateSnippetListings($theme_root)
     {
-        $snippets = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($theme_root . '/snippets', \RecursiveDirectoryIterator::SKIP_DOTS));
+        $snippets = get_files_recursively($theme_root . '/snippets');
         foreach($snippets as $name => $snippet)
         {
             self::$snippets[] = substr($name, strlen($theme_root . '/snippets') + 1);
         }
     }
 
+    /**
+     * @param $layout
+     * @return string
+     */
     public function getLayout($layout)
     {
         if(!in_array($layout, self::$layouts))
@@ -94,6 +139,10 @@ abstract class ThemeBase
         return file($this->theme_root . '/layouts/' . $layout);
     }
 
+    /**
+     * @param $page
+     * @return string
+     */
     public function getPage($page)
     {
         if(!in_array($page, self::$pages))
@@ -102,6 +151,10 @@ abstract class ThemeBase
         return file($this->theme_root . '/pages/' . $page);
     }
 
+    /**
+     * @param $partial
+     * @return string
+     */
     public function getPartial($partial)
     {
         if(!in_array($partial, self::$partials))
@@ -110,6 +163,10 @@ abstract class ThemeBase
         return file($this->theme_root . '/partials/' . $partial);
     }
 
+    /**
+     * @param $snippet
+     * @return string
+     */
     public function getSnippet($snippet)
     {
         if(!in_array($snippet, self::$snippets))

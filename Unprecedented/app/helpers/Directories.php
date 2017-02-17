@@ -46,4 +46,9 @@ namespace
     {
         return path_root() . '/theme' . $suffix;
     }
+
+    function get_files_recursively($path)
+    {
+        return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS));
+    }
 }
