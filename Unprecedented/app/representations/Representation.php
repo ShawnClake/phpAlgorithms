@@ -1,14 +1,13 @@
 <?php namespace App\Representations;
 
 use App\Classes\Meta;
-use App\StaticFactory;
 
 /**
  * Class Representation
- * @method static Representation make($file_contents, $separator = '===')
+ * @method static Representation make(array $file_contents, $separator = '===')
  * @package App\Representations
  */
-abstract class Representation extends StaticFactory
+abstract class Representation
 {
     /**
      * Meta data
@@ -24,19 +23,19 @@ abstract class Representation extends StaticFactory
     /**
      * @var array
      */
-    public $settings;
+    public $settings = [];
 
     /**
      * PHP code stored inside of a page/layout
-     * @var string
+     * @var array
      */
-    public $php;
+    public $php = [];
 
     /**
      * Representation Markup
-     * @var string
+     * @var array
      */
-    public $content;
+    public $content = [];
 
     /**
      * Separator string for splitting files into parts
@@ -44,15 +43,37 @@ abstract class Representation extends StaticFactory
      */
     public $separator;
 
-    public function makeFactory($file_contents, $separator = '===')
+    public function __construct($file_contents, $separator = "===")
+    {
+        //var_dump($file_contents);
+        $this->parse($file_contents, $separator);
+    }
+
+    public function parse($file_contents, $separator = "===")
     {
         $this->separator = $separator;
 
         $this->uid = uniqid();
 
-        $sections = substr_count($file_contents, $this->separator) + 1;
+        $currentSection = 0;
+        $section = [];
 
-        if($sections == 1)
+        foreach($file_contents as $line)
+        {
+            if (trim($line) === $this->separator)
+            {
+                $currentSection++;
+                $this->separate($section, $currentSection);
+            } else {
+                $section[] = $line;
+            }
+        }
+
+        $currentSection++;
+
+        $this->separate($section, $currentSection);
+
+        /*if($sections == 1)
         {
             $this->content = $file_contents;
             return $this;
@@ -74,9 +95,38 @@ abstract class Representation extends StaticFactory
             $this->php = substr($file_contents, $sep1 + 3, $sep2);
             $this->content = substr($file_contents, $sep2 + 3);
             return $this;
-        }
+        }*/
 
-        return $this;
+    }
+
+    private function separate(&$section, $count)
+    {
+        switch($count)
+        {
+            case 1:
+                $this->content = $section;
+                $section = [];
+                break;
+            case 2:
+                $this->settings = $this->content;
+                $this->content = $section;
+                $section = [];
+                break;
+            case 3:
+                $this->php = $this->content;
+                $this->content = $section;
+                $section = [];
+                break;
+            default:
+                break;
+        }
+    }
+
+    public function getContentString()
+    {
+        if(empty($this->content))
+            return null;
+        return file_to_string($this->content);
     }
 
 }

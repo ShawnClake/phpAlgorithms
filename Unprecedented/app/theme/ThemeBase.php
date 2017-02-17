@@ -1,6 +1,10 @@
 <?php namespace App\Theme;
 
 use App\Classes\Meta;
+use App\Representations\Theme\Layout;
+use App\Representations\Theme\Page;
+use App\Representations\Theme\Partial;
+use App\Representations\Theme\Snippet;
 
 /**
  * Class ThemeBase
@@ -133,50 +137,64 @@ abstract class ThemeBase
 
     /**
      * @param $layout
-     * @return array string
+     * @return Layout
      */
     public function getLayout($layout)
     {
         if(!in_array($layout, self::$layouts))
             return null;
 
-        return file($this->theme_root . '/layouts/' . $layout);
+        $contents = file($this->theme_root . '/layouts/' . $layout);
+
+        //var_dump(file($this->theme_root . '/layouts/' . $layout));
+
+        return new Layout($contents);
+        //return file($this->theme_root . '/layouts/' . $layout);
     }
 
     /**
      * @param $page
-     * @return array string
+     * @return Page
      */
     public function getPage($page)
     {
         if(!in_array($page, self::$pages))
             return null;
 
-        return file($this->theme_root . '/pages/' . $page);
+        $contents = file($this->theme_root . '/pages/' . $page);
+
+        return new Page($contents);
+        //return file($this->theme_root . '/pages/' . $page);
     }
 
     /**
      * @param $partial
-     * @return array string
+     * @return Partial
      */
     public function getPartial($partial)
     {
         if(!in_array($partial, self::$partials))
             return null;
 
-        return file($this->theme_root . '/partials/' . $partial);
+        $contents = file($this->theme_root . '/partials/' . $partial);
+
+        return new Partial($contents);
+        //return file($this->theme_root . '/partials/' . $partial);
     }
 
     /**
      * @param $snippet
-     * @return array string
+     * @return Snippet
      */
     public function getSnippet($snippet)
     {
         if(!in_array($snippet, self::$snippets))
             return null;
 
-        return file($this->theme_root . '/snippets/' . $snippet);
+        $contents = file($this->theme_root . '/snippets/' . $snippet);
+
+        return new Snippet($contents);
+        //return file($this->theme_root . '/snippets/' . $snippet);
     }
 
     public function layoutsToTwig()
@@ -187,7 +205,7 @@ abstract class ThemeBase
         $layouts = [];
         foreach(self::$layouts as $layout)
         {
-            $layouts['layouts.' . $layout] = file_to_string($this->getLayout($layout));
+            $layouts['layouts.' . $layout] = $this->getLayout($layout)->getContentString();
         }
         return $layouts;
     }
@@ -200,7 +218,7 @@ abstract class ThemeBase
         $pages = [];
         foreach(self::$pages as $page)
         {
-            $pages['pages.' . $page] = file_to_string($this->getPage($page));
+            $pages['pages.' . $page] = $this->getPage($page)->getContentString();
         }
         return $pages;
     }
@@ -213,7 +231,7 @@ abstract class ThemeBase
         $partials = [];
         foreach(self::$partials as $partial)
         {
-            $partials['partials.' . $partial] = file_to_string($this->getPartial($partial));
+            $partials['partials.' . $partial] = $this->getPartial($partial)->getContentString();
         }
         return $partials;
     }
@@ -226,7 +244,7 @@ abstract class ThemeBase
         $snippets = [];
         foreach(self::$snippets as $snippet)
         {
-            $snippets['snippets.' . $snippet] = file_to_string($this->getSnippet($snippet));
+            $snippets['snippets.' . $snippet] = $this->getSnippet($snippet)->getContentString();
         }
         return $snippets;
     }

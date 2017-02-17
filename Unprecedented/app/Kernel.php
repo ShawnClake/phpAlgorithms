@@ -111,8 +111,9 @@ class Kernel extends StaticFactory
         $uri = $this->getUri();
 
         $route = Route::make($uri)->destination();
-        $route->render();
         $this->route = $route;
+        $this->route->getResponse()->render();
+
     }
 
     /**

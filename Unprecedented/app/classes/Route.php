@@ -52,7 +52,7 @@ class Route extends StaticFactory
 
     /**
      * Helper function for creating the destination object from the resolved route
-     * @return RoutingResponse
+     * @return Route
      */
     public function destination()
     {
@@ -63,7 +63,7 @@ class Route extends StaticFactory
             {
                 $this->destination['type'] = 'plugin';
                 $this->destination['response'] = RoutingResponse::make($handler, 'plugin');
-                return $this->destination['response'];
+                return $this;
             }
 
         }
@@ -77,7 +77,7 @@ class Route extends StaticFactory
             {
                 $this->destination['type'] = 'module';
                 $this->destination['response'] = RoutingResponse::make($handler, 'module');
-                return $this->destination['response'];
+                return $this;
             }
 
         }
@@ -107,7 +107,7 @@ class Route extends StaticFactory
 
                 $this->destination['type'] = 'api';
                 $this->destination['response'] = RoutingResponse::make(new $name(), 'api');
-                return $this->destination['response'];
+                return $this;
             }
 
         }
@@ -115,7 +115,7 @@ class Route extends StaticFactory
         // 4th Priority - Must be a regular page then
         $this->destination['type'] = 'page';
         $this->destination['response'] = RoutingResponse::make(PageBuilder::make(Page::make($this->resolved)), 'page');
-        return $this->destination['response'];
+        return $this;
     }
 
     /**
@@ -147,7 +147,7 @@ class Route extends StaticFactory
 
     /**
      * Returns the response object
-     * @return mixed
+     * @return RoutingResponse
      */
     public function getResponse()
     {
@@ -156,7 +156,7 @@ class Route extends StaticFactory
 
     /**
      * Returns the response type
-     * @return mixed
+     * @return string
      */
     public function getResponseType()
     {
