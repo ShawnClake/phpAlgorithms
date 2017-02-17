@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use App\Theme\Theme;
+use App\Theme\ThemeBase;
 
 /**
  * Class App
@@ -33,7 +34,7 @@ class App extends StaticFactory
     public static $autoloader;
 
     /**
-     * @var Theme
+     * @var ThemeBase
      */
     public static $theme;
 

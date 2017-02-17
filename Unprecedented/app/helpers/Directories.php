@@ -20,7 +20,6 @@ namespace App\Helpers
 
 namespace
 {
-
     use App\Helpers\Directories;
 
     function path_offset($suffix = '')
@@ -41,5 +40,10 @@ namespace
     function path_plugins($suffix = '')
     {
         return path_root() . '/plugins' . $suffix;
+    }
+
+    function path_themes($suffix = '')
+    {
+        return path_root() . '/theme' . $suffix;
     }
 }

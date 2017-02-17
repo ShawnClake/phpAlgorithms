@@ -1,5 +1,6 @@
 <?php namespace App\Classes;
 
+use App\App;
 use App\StaticFactory;
 
 /**
@@ -9,28 +10,15 @@ use App\StaticFactory;
  */
 class PageBuilder extends StaticFactory
 {
-    public static $layouts;
-
-    public static $pages;
-
-    public static $partials;
-
-    public static $snippets;
-
     public static $page;
 
     public function makeFactory(Page $page)
     {
         self::$page = $page;
 
-        if(empty(self::$layouts))
-            $this->generateLayoutListings();
+        App::$theme->generateListings();
 
         return $this;
     }
 
-    public function generateLayoutListings()
-    {
-        echo 'Response built in PageBuilder';
-    }
 }
