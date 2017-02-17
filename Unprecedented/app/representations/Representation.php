@@ -38,15 +38,27 @@ abstract class Representation
     public $content = [];
 
     /**
+     * @var string
+     */
+    public $path = '';
+
+    /**
+     * @var string
+     */
+    public $path_file = '';
+
+    /**
      * Separator string for splitting files into parts
      * @var string
      */
     public $separator;
 
-    public function __construct($file_contents, $separator = "===")
+    public function __construct($path_representation_root, $path_representation_file, $separator = "===")
     {
         //var_dump($file_contents);
-        $this->parse($file_contents, $separator);
+        $this->path = $path_representation_root;
+        $this->path_file = $path_representation_file;
+        $this->parse(file($this->path . $this->path_file), $separator);
     }
 
     public function parse($file_contents, $separator = "===")
@@ -72,6 +84,8 @@ abstract class Representation
         $currentSection++;
 
         $this->separate($section, $currentSection);
+
+        $this->buildSettings();
 
         /*if($sections == 1)
         {
@@ -99,6 +113,20 @@ abstract class Representation
 
     }
 
+    private function buildSettings()
+    {
+        $settings = [];
+        foreach($this->settings as $key=>$setting)
+        {
+            $split = explode(': ', $setting);
+            $option = $split[0];
+            unset($split[0]);
+            $value = implode($split);
+            $settings[$option] = $value;
+        }
+        $this->settings = $settings;
+    }
+
     private function separate(&$section, $count)
     {
         switch($count)
@@ -120,6 +148,13 @@ abstract class Representation
             default:
                 break;
         }
+    }
+
+    public function getSetting($setting)
+    {
+        if(isset($this->settings[$setting]))
+            return $this->settings[$setting];
+        return null;
     }
 
     public function getContentString()

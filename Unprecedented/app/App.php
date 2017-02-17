@@ -81,7 +81,8 @@ class App extends StaticFactory
      */
     public function route()
     {
-        $route = self::$kernel->route();
+        self::$kernel->route();
+        self::$kernel->response();
     }
 
 }

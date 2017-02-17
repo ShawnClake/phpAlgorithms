@@ -72,7 +72,6 @@ class Route extends StaticFactory
         foreach(Provider::getModules() as $module)
         {
             $module = $module->instance;
-
             if($handler = $this->injector($module))
             {
                 $this->destination['type'] = 'module';
@@ -156,11 +155,21 @@ class Route extends StaticFactory
 
     /**
      * Returns the response type
-     * @return string
+     * @return mixed
      */
     public function getResponseType()
     {
         return $this->destination['type'];
+    }
+
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
+    public function getResolved()
+    {
+        return $this->resolved;
     }
 
 }

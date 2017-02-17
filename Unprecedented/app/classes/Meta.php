@@ -13,4 +13,9 @@ use App\Traits\MagicGetSet;
 class Meta
 {
     use MagicGetSet;
+
+    public function getAll()
+    {
+        return $this->data;
+    }
 }

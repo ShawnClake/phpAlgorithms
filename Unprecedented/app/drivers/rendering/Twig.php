@@ -50,8 +50,6 @@ class Twig extends StaticFactory implements iRendering
      */
     public function render($name, array $params = [])
     {
-        echo '<br>';
-        echo $name . '<br>';
         // TODO: Implement render() method.
         return self::$twig_environment->render($name, $params);
     }

@@ -26,7 +26,8 @@ class Module extends Provider
 
     public function testReply()
     {
-        echo 'Routing found in module';
+        echo 'Route found in module';
+        return [null];
     }
 
     public function injectRouting()

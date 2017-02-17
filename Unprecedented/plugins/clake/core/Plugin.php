@@ -33,7 +33,7 @@ class Plugin
     public function testResponse()
     {
         echo 'Response found in plugin';
-        return 'hi';
+        return [null];
     }
 
     public function injectRouting()

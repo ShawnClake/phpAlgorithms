@@ -31,22 +31,24 @@ abstract class ThemeBase
     /**
      * @var string[]
      */
-    public static $layouts;
+    public static $layouts = [];
 
     /**
      * @var string[]
      */
-    public static $pages;
+    public static $pages = [];
 
     /**
      * @var string[]
      */
-    public static $partials;
+    public static $partials = [];
 
     /**
      * @var string[]
      */
-    public static $snippets;
+    public static $snippets = [];
+
+    abstract public function register();
 
     /**
      * ThemeBase constructor.
@@ -56,10 +58,20 @@ abstract class ThemeBase
         $reflection = new \ReflectionClass($this);
         $this->path = $reflection->getNamespaceName();
         $this->theme_root = path_root('/' . $this->path);
+        $this->meta = new Meta();
+        $this->registrationHandler($this->register());
         /*
          * I don't want to call generateListings here because this is built on app load. We don't
          * necessarily need the listings for API/plugin/module overrides. Wait for PageBuilder to call generateListings
          */
+    }
+
+    private function registrationHandler(array $metas)
+    {
+        foreach($metas as $key=>$meta)
+        {
+            $this->meta->$key = $meta;
+        }
     }
 
     /**
@@ -144,11 +156,9 @@ abstract class ThemeBase
         if(!in_array($layout, self::$layouts))
             return null;
 
-        $contents = file($this->theme_root . '/layouts/' . $layout);
-
         //var_dump(file($this->theme_root . '/layouts/' . $layout));
 
-        return new Layout($contents);
+        return new Layout($this->theme_root . '/layouts/', $layout);
         //return file($this->theme_root . '/layouts/' . $layout);
     }
 
@@ -161,9 +171,7 @@ abstract class ThemeBase
         if(!in_array($page, self::$pages))
             return null;
 
-        $contents = file($this->theme_root . '/pages/' . $page);
-
-        return new Page($contents);
+        return new Page($this->theme_root . '/pages/', $page);
         //return file($this->theme_root . '/pages/' . $page);
     }
 
@@ -176,9 +184,7 @@ abstract class ThemeBase
         if(!in_array($partial, self::$partials))
             return null;
 
-        $contents = file($this->theme_root . '/partials/' . $partial);
-
-        return new Partial($contents);
+        return new Partial($this->theme_root . '/partials/', $partial);
         //return file($this->theme_root . '/partials/' . $partial);
     }
 
@@ -191,9 +197,7 @@ abstract class ThemeBase
         if(!in_array($snippet, self::$snippets))
             return null;
 
-        $contents = file($this->theme_root . '/snippets/' . $snippet);
-
-        return new Snippet($contents);
+        return new Snippet($this->theme_root . '/snippets/', $snippet);
         //return file($this->theme_root . '/snippets/' . $snippet);
     }
 

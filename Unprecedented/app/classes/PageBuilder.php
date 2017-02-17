@@ -31,6 +31,8 @@ class PageBuilder extends StaticFactory
 
         self::$twig = Twig::initialize()->extend();
 
+        self::$page->getPathToPage();
+
         return $this;
     }
 
@@ -43,7 +45,11 @@ class PageBuilder extends StaticFactory
 
     public function assembler()
     {
-        return self::$twig->render('layouts.main.htm', ['name' => false]);
+        //echo self::$page->representation->path_file;
+        if(isset(self::$page->representation))
+            return self::$twig->render('pages.' . self::$page->representation->path_file, ['name' => false]);
+        else
+            return 'Error 404 - Route not found';
     }
 
     public function processor()
