@@ -28,6 +28,11 @@ class PageBuilder extends StaticFactory
      */
     public static $markdown;
 
+    /**
+     * Factory
+     * @param Page $page
+     * @return $this
+     */
     public function makeFactory(Page $page)
     {
         self::$page = $page;
@@ -45,6 +50,9 @@ class PageBuilder extends StaticFactory
         return $this;
     }
 
+    /**
+     * Renders the page via the theme
+     */
     public function render()
     {
         if(isset(self::$page->representation))
@@ -61,6 +69,10 @@ class PageBuilder extends StaticFactory
         echo self::$page->content;
     }
 
+    /**
+     * Assembles various Representations into a complete page
+     * @return string
+     */
     protected function assembler()
     {
         self::$twig->boot();
@@ -68,18 +80,30 @@ class PageBuilder extends StaticFactory
         return self::$twig->render('pages.' . self::$page->representation->path_file, ['name' => false]);
     }
 
+    /**
+     * Pre-processes Representations prior to assembly
+     * @return mixed|string
+     */
     protected function preprocessor()
     {
         self::$markdown->boot();
         return self::$markdown->render(self::$page->content);
     }
 
+    /**
+     * Processes the assembled page. Think of this as a post-process
+     * @return string
+     */
     protected function processor()
     {
         return self::$page->content;
         //return self::$markdown->render($content);
     }
 
+    /**
+     * Handles encountering a route with no applicable destination
+     * @return string
+     */
     protected function routeNotFound()
     {
         return 'Error 404 - Route not found';

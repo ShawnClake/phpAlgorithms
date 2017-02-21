@@ -41,11 +41,13 @@ class ParseDown extends StaticFactory implements iRendering
     }
 
     /**
-     * @param $content
+     * Converts a representation's markdown syntax if its marked as md in the settings
+     * Utilizes a call back to do so.
+     * @param $content_not_used
      * @param array $param
      * @return mixed|string
      */
-    public function render($content = '', array $param = ['breaks' => true, 'escaped' => false, 'autolinks' => true])
+    public function render($content_not_used = '', array $param = ['breaks' => true, 'escaped' => false, 'autolinks' => true])
     {
         self::$parse_down->setBreaksEnabled($param['breaks']);
         self::$parse_down->setMarkupEscaped($param['escaped']);

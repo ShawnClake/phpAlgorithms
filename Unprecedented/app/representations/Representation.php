@@ -58,19 +58,29 @@ abstract class Representation
      */
     public $separator;
 
+    /**
+     * Representation constructor.
+     * @param $path_representation_root
+     * @param $path_representation_file
+     * @param string $separator
+     */
     public function __construct($path_representation_root, $path_representation_file, $separator = "===")
     {
         //var_dump($file_contents);
         $this->path = $path_representation_root;
         $this->path_file = $path_representation_file;
+        $this->uid = uniqid();
         $this->parse(file($this->path . $this->path_file), $separator);
     }
 
+    /**
+     * Parses through a file and separates the settings/php/content settings from each other.
+     * @param $file_contents
+     * @param string $separator
+     */
     public function parse($file_contents, $separator = "===")
     {
         $this->separator = $separator;
-
-        $this->uid = uniqid();
 
         $currentSection = 0;
         $section = [];
@@ -92,32 +102,11 @@ abstract class Representation
 
         $this->buildSettings();
 
-        /*if($sections == 1)
-        {
-            $this->content = $file_contents;
-            return $this;
-        }
-
-        if($sections == 2)
-        {
-            $sep1 = strpos($file_contents, $this->separator);
-            $this->settings = substr($file_contents, 0, $sep1);
-            $this->content = substr($file_contents, $sep1 + 3);
-            return $this;
-        }
-
-        if($sections == 3)
-        {
-            $sep1 = strpos($file_contents, $this->separator);
-            $sep2 = strpos($file_contents, $this->separator, $sep1);
-            $this->settings = substr($file_contents, 0, $sep1);
-            $this->php = substr($file_contents, $sep1 + 3, $sep2);
-            $this->content = substr($file_contents, $sep2 + 3);
-            return $this;
-        }*/
-
     }
 
+    /**
+     * Sets up a settings array based upon the settings found in a Representation
+     */
     private function buildSettings()
     {
         $settings = [];
@@ -132,6 +121,10 @@ abstract class Representation
         $this->settings = $settings;
     }
 
+    /**
+     * @param $section
+     * @param $count
+     */
     private function separate(&$section, $count)
     {
         switch($count)
@@ -155,6 +148,11 @@ abstract class Representation
         }
     }
 
+    /**
+     * Returns a setting
+     * @param $setting
+     * @return mixed|null
+     */
     public function getSetting($setting)
     {
         if(isset($this->settings[$setting]))
@@ -162,6 +160,10 @@ abstract class Representation
         return null;
     }
 
+    /**
+     * Converts the content of a file to a string, unless thats already been done, then just return the string
+     * @return null|string
+     */
     public function getContentString()
     {
         if(empty($this->content))

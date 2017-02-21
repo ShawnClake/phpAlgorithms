@@ -55,6 +55,9 @@ abstract class ThemeBase
      */
     public static $representations = [];
 
+    /**
+     *
+     */
     abstract public function register();
 
     /**
@@ -73,6 +76,10 @@ abstract class ThemeBase
          */
     }
 
+    /**
+     * Adds meta to the Theme specified as an override in the specific Theme class
+     * @param array $metas
+     */
     private function registrationHandler(array $metas)
     {
         foreach($metas as $key=>$meta)
@@ -208,6 +215,9 @@ abstract class ThemeBase
         //return file($this->theme_root . '/snippets/' . $snippet);
     }
 
+    /**
+     * @return array
+     */
     public function layoutsToTwig()
     {
         if(empty(self::$layouts))
@@ -221,6 +231,9 @@ abstract class ThemeBase
         return $layouts;
     }
 
+    /**
+     * @return array
+     */
     public function pagesToTwig()
     {
         if(empty(self::$pages))
@@ -234,6 +247,9 @@ abstract class ThemeBase
         return $pages;
     }
 
+    /**
+     * @return array
+     */
     public function partialsToTwig()
     {
         if(empty(self::$partials))
@@ -247,6 +263,9 @@ abstract class ThemeBase
         return $partials;
     }
 
+    /**
+     * @return array
+     */
     public function snippetsToTwig()
     {
         if(empty(self::$snippets))

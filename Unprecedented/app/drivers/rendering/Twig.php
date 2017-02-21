@@ -21,11 +21,19 @@ class Twig extends StaticFactory implements iRendering
      */
     public static $twig_environment;
 
+    /**
+     * Register
+     * @return $this
+     */
     public function registerFactory()
     {
         return $this;
     }
 
+    /**
+     * Extend
+     * @return $this
+     */
     public function extend()
     {
         // TODO: Implement extend() method.
@@ -33,6 +41,7 @@ class Twig extends StaticFactory implements iRendering
     }
 
     /**
+     * Adds Representations into Twig, then creates a loader chain and twig environment
      * @return mixed
      */
     public function boot()
@@ -52,6 +61,7 @@ class Twig extends StaticFactory implements iRendering
     }
 
     /**
+     * Assembles the page using twig
      * @param $name
      * @param array $params
      * @return string

@@ -162,11 +162,19 @@ class Route extends StaticFactory
         return $this->destination['type'];
     }
 
+    /**
+     * Returns the unresolved URI
+     * @return mixed
+     */
     public function getUri()
     {
         return $this->uri;
     }
 
+    /**
+     * Returns the resolved URI
+     * @return mixed
+     */
     public function getResolved()
     {
         return $this->resolved;

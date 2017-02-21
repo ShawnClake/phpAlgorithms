@@ -36,11 +36,13 @@ class Markdown extends StaticFactory implements iRendering
     }
 
     /**
-     * @param $content
+     * Converts a representation's markdown syntax if its marked as md in the settings
+     * Utilizes a call back to do so.
+     * @param $content_not_used
      * @param array $param
      * @return string
      */
-    public function render($content = '', array $param = ['html5' => true, 'listnumbering' => true, 'newlines' => true])
+    public function render($content_not_used = '', array $param = ['html5' => true, 'listnumbering' => true, 'newlines' => true])
     {
         self::$markdown->html5 = $param['html5'];
         self::$markdown->keepListStartNumber = $param['listnumbering'];

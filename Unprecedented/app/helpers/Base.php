@@ -9,14 +9,19 @@ namespace App\Helpers {
      * @method static Base config()
      * @package App\Helpers
      */
-    class Base extends StaticFactory
+    abstract class Base extends StaticFactory
     {
+        /** @var string[] */
         public static $config = [];
 
-        public function inject()
-        {
-        }
+        /**
+         * Override this to allow other helper classes to inject config entries
+         */
+        abstract public function inject();
 
+        /**
+         *
+         */
         public function configFactory()
         {
             $this->inject();
