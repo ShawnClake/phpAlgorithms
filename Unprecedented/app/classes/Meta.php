@@ -14,6 +14,10 @@ class Meta
 {
     use MagicGetSet;
 
+    /**
+     * Returns all of the meta data
+     * @return array
+     */
     public function getAll()
     {
         return $this->data;

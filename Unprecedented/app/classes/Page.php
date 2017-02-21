@@ -15,17 +15,27 @@ class Page extends StaticFactory
     /** @var string This is the resolved URI */
     public $routing;
 
+    /** @var string */
     public $content;
 
     /** @var Representation */
     public $representation = null;
 
+    /**
+     * Factory
+     * @param $routing
+     * @return $this
+     */
     public function makeFactory($routing)
     {
         $this->routing = $routing;
         return $this;
     }
 
+    /**
+     * Creates a page representation for the resolved URI we are trying to load.
+     * Takes the
+     */
     public function getPathToPage()
     {
         $pages = ThemeBase::$pages;

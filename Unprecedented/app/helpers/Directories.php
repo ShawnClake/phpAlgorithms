@@ -24,12 +24,12 @@ namespace
 
     function path_offset($suffix = '')
     {
-        return Directories::$config['directories']['offset'] . $suffix;
+        return fix_slashes(Directories::$config['directories']['offset'] . $suffix);
     }
 
     function path_root($suffix = '')
     {
-        return Directories::$config['directories']['base'] . $suffix;
+        return fix_slashes(Directories::$config['directories']['base'] . $suffix);
     }
 
     function path_app($suffix = '')
@@ -49,7 +49,7 @@ namespace
 
     function get_files_recursively($path)
     {
-        return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS));
+        return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(fix_slashes($path), \RecursiveDirectoryIterator::SKIP_DOTS));
     }
 
     function file_to_string(array $file)
@@ -61,5 +61,10 @@ namespace
     {
         $path = str_replace('\\', '.', $path);
         return str_replace('/', '.', $path);
+    }
+
+    function fix_slashes($path)
+    {
+        return str_replace('\\', '/', $path);
     }
 }
