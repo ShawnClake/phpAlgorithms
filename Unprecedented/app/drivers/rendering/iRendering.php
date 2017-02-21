@@ -2,9 +2,11 @@
 
 interface iRendering
 {
-    public function initializeFactory();
+    public function registerFactory();
 
     public function extend();
 
-    public function render($name, array $param = []);
+    public function boot();
+
+    public function render($content = '', array $param = []);
 }

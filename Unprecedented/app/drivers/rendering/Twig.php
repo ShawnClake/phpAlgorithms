@@ -5,7 +5,7 @@ use App\StaticFactory;
 
 /**
  * Class Twig
- * @method static Twig initialize()
+ * @method static Twig register()
  * @package App\Drivers\Rendering
  */
 class Twig extends StaticFactory implements iRendering
@@ -21,7 +21,21 @@ class Twig extends StaticFactory implements iRendering
      */
     public static $twig_environment;
 
-    public function initializeFactory()
+    public function registerFactory()
+    {
+        return $this;
+    }
+
+    public function extend()
+    {
+        // TODO: Implement extend() method.
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function boot()
     {
         $layouts = new \Twig_Loader_Array(App::$theme->layoutsToTwig());
         $pages = new \Twig_Loader_Array(App::$theme->pagesToTwig());
@@ -37,20 +51,16 @@ class Twig extends StaticFactory implements iRendering
         return $this;
     }
 
-    public function extend()
-    {
-        // TODO: Implement extend() method.
-        return $this;
-    }
-
     /**
      * @param $name
      * @param array $params
      * @return string
      */
-    public function render($name, array $params = [])
+    public function render($name = '', array $params = [])
     {
         // TODO: Implement render() method.
         return self::$twig_environment->render($name, $params);
     }
+
+
 }

@@ -40,6 +40,11 @@ abstract class Representation
     /**
      * @var string
      */
+    public $content_string = '';
+
+    /**
+     * @var string
+     */
     public $path = '';
 
     /**
@@ -161,7 +166,11 @@ abstract class Representation
     {
         if(empty($this->content))
             return null;
-        return file_to_string($this->content);
+
+        if(empty($this->content_string))
+            $this->content_string = file_to_string($this->content);
+
+        return $this->content_string;
     }
 
 }

@@ -1,14 +1,26 @@
 <?php namespace App\Drivers\Rendering;
 
-class ParseDown implements iRendering
+use App\StaticFactory;
+use App\App;
+
+/**
+ * Class ParseDown
+ * @method static ParseDown register()
+ * @package App\Drivers\Rendering
+ */
+class ParseDown extends StaticFactory implements iRendering
 {
+
+    /** @var \ParsedownExtra */
+    public static $parse_down;
 
     /**
      * @return mixed
      */
-    public function initialize()
+    public function registerFactory()
     {
-        // TODO: Implement initialize() method.
+        self::$parse_down = new \ParsedownExtra();
+        return $this;
     }
 
     /**
@@ -16,14 +28,38 @@ class ParseDown implements iRendering
      */
     public function extend()
     {
-        // TODO: Implement extend() method.
+        return $this;
     }
 
     /**
      * @return mixed
      */
-    public function render()
+    public function boot()
     {
-        // TODO: Implement render() method.
+        // TODO: Implement boot() method.
+        return $this;
     }
+
+    /**
+     * @param $content
+     * @param array $param
+     * @return mixed|string
+     */
+    public function render($content = '', array $param = ['breaks' => true, 'escaped' => false, 'autolinks' => true])
+    {
+        self::$parse_down->setBreaksEnabled($param['breaks']);
+        self::$parse_down->setMarkupEscaped($param['escaped']);
+        self::$parse_down->setUrlsLinked($param['autolinks']);
+
+        $parser = self::$parse_down;
+
+        $callback = function($content) use ($parser) { return $parser->text($content); };
+
+        App::$theme->modifyRepresentations($callback);
+
+        return '';
+        //return self::$parse_down->text($content);
+    }
+
+
 }

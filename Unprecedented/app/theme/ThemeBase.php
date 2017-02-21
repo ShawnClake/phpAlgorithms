@@ -1,6 +1,8 @@
 <?php namespace App\Theme;
 
 use App\Classes\Meta;
+use App\Drivers\Rendering\Markdown;
+use App\Representations\Representation;
 use App\Representations\Theme\Layout;
 use App\Representations\Theme\Page;
 use App\Representations\Theme\Partial;
@@ -47,6 +49,11 @@ abstract class ThemeBase
      * @var string[]
      */
     public static $snippets = [];
+
+    /**
+     * @var Representation[string][string]
+     */
+    public static $representations = [];
 
     abstract public function register();
 
@@ -207,9 +214,9 @@ abstract class ThemeBase
             return [];
 
         $layouts = [];
-        foreach(self::$layouts as $layout)
+        foreach(self::$representations['layouts'] as $key=>$layout)
         {
-            $layouts['layouts.' . $layout] = $this->getLayout($layout)->getContentString();
+            $layouts['layouts.' . path_to_dot($key)] = $layout->getContentString();
         }
         return $layouts;
     }
@@ -220,9 +227,9 @@ abstract class ThemeBase
             return [];
 
         $pages = [];
-        foreach(self::$pages as $page)
+        foreach(self::$representations['pages'] as $key=>$page)
         {
-            $pages['pages.' . $page] = $this->getPage($page)->getContentString();
+            $pages['pages.' . path_to_dot($key)] = $page->getContentString();
         }
         return $pages;
     }
@@ -233,9 +240,9 @@ abstract class ThemeBase
             return [];
 
         $partials = [];
-        foreach(self::$partials as $partial)
+        foreach(self::$representations['partials'] as $key=>$partial)
         {
-            $partials['partials.' . $partial] = $this->getPartial($partial)->getContentString();
+            $partials['partials.' . path_to_dot($key)] = $partial->getContentString();
         }
         return $partials;
     }
@@ -246,11 +253,109 @@ abstract class ThemeBase
             return [];
 
         $snippets = [];
-        foreach(self::$snippets as $snippet)
+        foreach(self::$representations['snippets'] as $key=>$snippet)
         {
-            $snippets['snippets.' . $snippet] = $this->getSnippet($snippet)->getContentString();
+            $snippets['snippets.' . path_to_dot($key)] = $snippet->getContentString();
         }
         return $snippets;
+    }
+
+    /**
+     * @return Representation
+     */
+    public function generateRepresentations()
+    {
+        if(!empty(self::$layouts))
+        {
+            foreach(self::$layouts as $layout)
+            {
+                self::$representations['layouts'][$layout] = $this->getLayout($layout);
+            }
+        }
+
+        if(!empty(self::$pages))
+        {
+            foreach(self::$pages as $page)
+            {
+                $representation = $this->getPage($page);
+
+                $layout = $representation->getSetting('layout');
+
+                if(empty($layout))
+                    continue;
+
+                self::$representations['pages'][$page] = $representation;
+            }
+        }
+
+        if(!empty(self::$partials))
+        {
+            foreach(self::$partials as $partial)
+            {
+                self::$representations['partials'][$partial] = $this->getPartial($partial);
+            }
+        }
+
+        if(!empty(self::$snippets))
+        {
+            foreach(self::$snippets as $snippet)
+            {
+                self::$representations['snippets'][$snippet] = $this->getSnippet($snippet);
+            }
+        }
+
+        return self::$representations;
+    }
+
+    /**
+     * @param $callback
+     */
+    public function modifyRepresentations($callback)
+    {
+        if(!empty(self::$layouts))
+        {
+            foreach (self::$representations['layouts'] as $key => $layout)
+            {
+                if($layout->getSetting('md'))
+                    self::$representations['layouts'][$key]->content_string = $callback($layout->getContentString());
+            }
+        }
+
+        if(!empty(self::$pages))
+        {
+            foreach (self::$representations['pages'] as $key => $page)
+            {
+                $content_string = $page->getContentString();
+
+                if($page->getSetting('md'))
+                {
+                    $content_string = $callback($content_string);
+                }
+
+                $layout = $page->getSetting('layout');
+
+                $content_string = "{% extends '" . trim($layout) . "' %} \n {% block page %} \n " . $content_string . " \n {% endblock %}";
+                self::$representations['pages'][$key]->content_string = $content_string;
+            }
+        }
+
+        if(!empty(self::$partials))
+        {
+            foreach (self::$representations['partials'] as $key => $partial)
+            {
+                if($partial->getSetting('md'))
+                    self::$representations['partials'][$key]->content_string = $callback($partial->getContentString());
+            }
+        }
+
+        if(!empty(self::$snippets))
+        {
+            foreach (self::$representations['snippets'] as $key => $snippet)
+            {
+                if($snippet->getSetting('md'))
+                    self::$representations['snippets'][$key]->content_string = $callback($snippet->getContentString());
+            }
+        }
     }
 
 }

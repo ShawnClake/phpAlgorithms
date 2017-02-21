@@ -56,4 +56,10 @@ namespace
     {
         return implode(" ", $file);
     }
+
+    function path_to_dot($path)
+    {
+        $path = str_replace('\\', '.', $path);
+        return str_replace('/', '.', $path);
+    }
 }

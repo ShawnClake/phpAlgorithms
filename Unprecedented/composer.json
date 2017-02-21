@@ -7,6 +7,8 @@
   },
   "require": {
     "twig/twig": "v1.31.0",
-    "erusev/parsedown": "1.6.1"
+    "erusev/parsedown": "1.6.1",
+    "erusev/parsedown-extra": "0.7.0",
+    "cebe/markdown": "1.1.1"
   }
 }

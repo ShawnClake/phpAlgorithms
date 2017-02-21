@@ -48,6 +48,6 @@
     ## Standard routes
     ##
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    RewriteRule ^ index.php [PT,QSA,L]
 
 </IfModule>
