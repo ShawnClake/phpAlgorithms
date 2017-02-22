@@ -95,6 +95,11 @@ namespace
         return fix_slashes(path_root() . '/theme' . $suffix);
     }
 
+    function path_cache($suffix = '')
+    {
+        return fix_slashes(path_root() . '/cache' . $suffix);
+    }
+
     /**
      * Returns all of the files in a directory. Does so recursively.
      * BE CAREFUL WITH THIS.
@@ -134,6 +139,7 @@ namespace
      */
     function fix_slashes($path)
     {
-        return str_replace('\\', DIRECTORY_SEPARATOR, $path);
+        $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 }

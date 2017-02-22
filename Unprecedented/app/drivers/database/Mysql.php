@@ -1,5 +1,8 @@
 <?php namespace App\Drivers\Database;
 
+use App\Drivers\Database;
+use App\StaticFactoryTrait;
+
 /**
  * Class Mysql
  *
@@ -7,7 +10,7 @@
  *
  * @package App\Drivers\Database
  */
-class Mysql implements iDatabase
+class Mysql extends Database
 {
-
+    use StaticFactoryTrait;
 }

@@ -1,5 +1,6 @@
 <?php namespace App\Theme;
 
+use App\App;
 use App\Classes\Meta;
 use App\Drivers\Rendering\Markdown;
 use App\Representations\Representation;
@@ -341,17 +342,41 @@ abstract class ThemeBase
     {
         if(!empty(self::$layouts))
         {
+            /**
+             * @var string $key
+             * @var Layout $layout
+             */
             foreach (self::$representations['layouts'] as $key => $layout)
             {
+                if($layout->cached)
+                {
+                    self::$representations['layouts'][$key]->content_string = $layout->getContentString();
+                    continue;
+                }
+
                 if($layout->getSetting('md'))
+                {
                     self::$representations['layouts'][$key]->content_string = $callback($layout->getContentString());
+                }
+
+                App::$kernel->cache->store('theme', $layout->path_file, self::$representations['layouts'][$key]->content_string, $layout->md5);
             }
         }
 
         if(!empty(self::$pages))
         {
+            /**
+             * @var string $key
+             * @var Page $page
+             */
             foreach (self::$representations['pages'] as $key => $page)
             {
+                if($page->cached)
+                {
+                    self::$representations['pages'][$key]->content_string = $page->getContentString();
+                    continue;
+                }
+
                 $content_string = $page->getContentString();
 
                 if($page->getSetting('md'))
@@ -363,24 +388,50 @@ abstract class ThemeBase
 
                 $content_string = "{% extends '" . trim($layout) . "' %} \n {% block page %} \n " . $content_string . " \n {% endblock %}";
                 self::$representations['pages'][$key]->content_string = $content_string;
+
+                App::$kernel->cache->store('theme', $page->path_file, self::$representations['pages'][$key]->content_string, $page->md5);
             }
         }
 
         if(!empty(self::$partials))
         {
+            /**
+             * @var string $key
+             * @var Partial $partial
+             */
             foreach (self::$representations['partials'] as $key => $partial)
             {
+                if($partial->cached)
+                {
+                    self::$representations['partials'][$key]->content_string = $partial->getContentString();
+                    continue;
+                }
+
                 if($partial->getSetting('md'))
                     self::$representations['partials'][$key]->content_string = $callback($partial->getContentString());
+
+                App::$kernel->cache->store('theme', $partial->path_file, self::$representations['partials'][$key]->content_string, $partial->md5);
             }
         }
 
         if(!empty(self::$snippets))
         {
+            /**
+             * @var string $key
+             * @var Snippet $snippet
+             */
             foreach (self::$representations['snippets'] as $key => $snippet)
             {
+                if($snippet->cached)
+                {
+                    self::$representations['snippets'][$key]->content_string = $snippet->getContentString();
+                    continue;
+                }
+
                 if($snippet->getSetting('md'))
                     self::$representations['snippets'][$key]->content_string = $callback($snippet->getContentString());
+
+                App::$kernel->cache->store('theme', $snippet->path_file, self::$representations['snippets'][$key]->content_string, $snippet->md5);
             }
         }
     }

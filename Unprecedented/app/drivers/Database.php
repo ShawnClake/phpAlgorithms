@@ -1,6 +1,8 @@
 <?php namespace App\Drivers;
 
-class Database
+use App\Drivers\Database\iDatabase;
+
+abstract class Database implements iDatabase
 {
 
 }

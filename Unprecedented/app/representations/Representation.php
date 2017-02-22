@@ -1,5 +1,6 @@
 <?php namespace App\Representations;
 
+use App\App;
 use App\Classes\Meta;
 
 /**
@@ -59,6 +60,16 @@ abstract class Representation
     public $separator;
 
     /**
+     * @var bool
+     */
+    public $cached = false;
+
+    /**
+     * @var string
+     */
+    public $md5 = '';
+
+    /**
      * Representation constructor.
      * @param $path_representation_root
      * @param $path_representation_file
@@ -101,6 +112,16 @@ abstract class Representation
         $this->separate($section, $currentSection);
 
         $this->buildSettings();
+
+        $this->md5 = md5(file_to_string($this->content));
+
+        $this->getContentString();
+
+        if(App::$kernel->cache->isCached('theme', $this->path_file, $this->content))
+        {
+            $this->cached = true;
+            $this->content_string = file_to_string(App::$kernel->cache->retrieve('theme', $this->path_file));
+        }
 
     }
 

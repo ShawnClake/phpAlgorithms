@@ -37,6 +37,6 @@ class Config extends StaticFactory
         if(!key_exists($key, self::$config[$config]))
             return false;
 
-        echo 'test';
+        return self::$config[$config][$key];
     }
 }

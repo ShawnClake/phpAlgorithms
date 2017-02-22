@@ -1,6 +1,8 @@
 <?php namespace App\Drivers;
 
-class Socket
+use App\Drivers\Sockets\iSocket;
+
+abstract class Socket implements iSocket
 {
 
 }

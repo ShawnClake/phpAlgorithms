@@ -1,15 +1,17 @@
 <?php namespace App\Drivers\Rendering;
 
-use App\StaticFactory;
+use App\Drivers\Rendering;
 use App\App;
+use App\StaticFactoryTrait;
 
 /**
  * Class ParseDown
  * @method static ParseDown register()
  * @package App\Drivers\Rendering
  */
-class ParseDown extends StaticFactory implements iRendering
+class ParseDown extends Rendering
 {
+    use StaticFactoryTrait;
 
     /** @var \ParsedownExtra */
     public static $parse_down;

@@ -1,6 +1,9 @@
 <?php namespace App;
 
 use \App\Classes\Route;
+use App\Drivers\Cache;
+use App\Drivers\Database;
+use App\Drivers\Socket;
 
 /**
  * Class Kernel
@@ -26,15 +29,21 @@ class Kernel extends StaticFactory
 
     /**
      * Socket Driver
-     * @var
+     * @var Socket
      */
-    public $socket;
+    public $socket = null;
 
     /**
      * Database Driver
-     * @var
+     * @var Database
      */
-    public $db;
+    public $db = null;
+
+    /**
+     * Cache Driver
+     * @var Cache
+     */
+    public $cache = null;
 
     /**
      * Factory function which:
@@ -124,6 +133,15 @@ class Kernel extends StaticFactory
      */
     public function loadDrivers()
     {
+        /** @var Cache $cache */
+        if($cache = App::$config->get('cache', 'driver'))
+        {
+            $cache = 'App\\Drivers\\Cache\\' . $cache;
+            $this->cache = $cache::boot();
+        }
+
+
+
 
     }
 

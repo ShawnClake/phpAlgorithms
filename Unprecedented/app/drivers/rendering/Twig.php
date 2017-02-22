@@ -1,15 +1,17 @@
 <?php namespace App\Drivers\Rendering;
 
 use App\App;
-use App\StaticFactory;
+use App\Drivers\Rendering;
+use App\StaticFactoryTrait;
 
 /**
  * Class Twig
  * @method static Twig register()
  * @package App\Drivers\Rendering
  */
-class Twig extends StaticFactory implements iRendering
+class Twig extends Rendering
 {
+    use StaticFactoryTrait;
 
     /**
      * @var \Twig_Loader_Chain

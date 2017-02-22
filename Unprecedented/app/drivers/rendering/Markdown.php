@@ -3,7 +3,8 @@
 namespace App\Drivers\Rendering;
 
 use App\App;
-use App\StaticFactory;
+use App\Drivers\Rendering;
+use App\StaticFactoryTrait;
 use cebe\markdown\GithubMarkdown;
 use cebe\markdown\MarkdownExtra;
 
@@ -12,8 +13,10 @@ use cebe\markdown\MarkdownExtra;
  * @method static Markdown register()
  * @package App\Drivers\Rendering
  */
-class Markdown extends StaticFactory implements iRendering
+class Markdown extends Rendering
 {
+    use StaticFactoryTrait;
+
     /** @var GithubMarkdown */
     public static $markdown;
 
