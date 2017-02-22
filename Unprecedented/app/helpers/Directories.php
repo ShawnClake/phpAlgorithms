@@ -12,7 +12,7 @@ namespace App\Helpers
          * @var string[]
          */
         private $options = [
-            'offset' => '/Projects/phpAlgorithms/Unprecedented',
+            'offset' => '',
         ];
 
         /**

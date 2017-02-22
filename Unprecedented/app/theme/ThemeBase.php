@@ -111,6 +111,8 @@ abstract class ThemeBase
      */
     private function generateLayoutListings($theme_root)
     {
+        if(!file_exists($theme_root . '/layouts'))
+            return;
         $layouts = get_files_recursively($theme_root . '/layouts');
         //$layouts = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($theme_root . '/layouts', \RecursiveDirectoryIterator::SKIP_DOTS));
         foreach($layouts as $name => $layout)
@@ -130,6 +132,8 @@ abstract class ThemeBase
      */
     private function generatePageListings($theme_root)
     {
+        if(!file_exists($theme_root . '/pages'))
+            return;
         $pages = get_files_recursively($theme_root . '/pages');
         foreach($pages as $name => $page)
         {
@@ -142,6 +146,8 @@ abstract class ThemeBase
      */
     private function generatePartialListings($theme_root)
     {
+        if(!file_exists($theme_root . '/partials'))
+            return;
         $partials = get_files_recursively($theme_root . '/partials');
         foreach($partials as $name => $partial)
         {
@@ -154,6 +160,8 @@ abstract class ThemeBase
      */
     private function generateSnippetListings($theme_root)
     {
+        if(!file_exists($theme_root . '/snippets'))
+            return;
         $snippets = get_files_recursively($theme_root . '/snippets');
         foreach($snippets as $name => $snippet)
         {
