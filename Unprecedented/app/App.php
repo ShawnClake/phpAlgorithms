@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use App\Classes\Config;
 use App\Theme\Theme;
 use App\Theme\ThemeBase;
 
@@ -39,15 +40,26 @@ class App extends StaticFactory
     public static $theme;
 
     /**
+     * @var Config
+     */
+    public static $config;
+
+    /**
      * Factory function which handles adding in helpers and starting up the kernel
      * @return $this
      */
     public function makeFactory()
     {
         $this->exposeHelpers();
+        $this->loadConfig();
         $this->kernelStartup();
         $this->themeStartup();
         return $this;
+    }
+
+    public function loadConfig()
+    {
+        self::$config = Config::load();
     }
 
     /**

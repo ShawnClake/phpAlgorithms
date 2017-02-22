@@ -2,6 +2,7 @@
 
 namespace App\Helpers
 {
+
     /**
      * Class Directories
      * @package App\Helpers
@@ -12,7 +13,7 @@ namespace App\Helpers
          * @var string[]
          */
         private $options = [
-            'offset' => '',
+            'offset' => '/Projects/phpAlgorithms/Unprecedented',
         ];
 
         /**
@@ -61,7 +62,17 @@ namespace
      */
     function path_app($suffix = '')
     {
-        return path_root() . '/app' . $suffix;
+        return fix_slashes(path_root() . '/app' . $suffix);
+    }
+
+    /**
+     * Absolute path to the config folder
+     * @param string $suffix
+     * @return mixed
+     */
+    function path_config($suffix = '')
+    {
+        return fix_slashes(path_root() . '/config' . $suffix);
     }
 
     /**
@@ -71,7 +82,7 @@ namespace
      */
     function path_plugins($suffix = '')
     {
-        return path_root() . '/plugins' . $suffix;
+        return fix_slashes(path_root() . '/plugins' . $suffix);
     }
 
     /**
@@ -81,7 +92,7 @@ namespace
      */
     function path_themes($suffix = '')
     {
-        return path_root() . '/theme' . $suffix;
+        return fix_slashes(path_root() . '/theme' . $suffix);
     }
 
     /**
@@ -123,6 +134,6 @@ namespace
      */
     function fix_slashes($path)
     {
-        return str_replace('\\', '/', $path);
+        return str_replace('\\', DIRECTORY_SEPARATOR, $path);
     }
 }
