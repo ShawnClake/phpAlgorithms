@@ -117,7 +117,7 @@ abstract class Representation
 
         $this->getContentString();
 
-        if(App::$kernel->cache->isCached('theme', $this->path_file, $this->content))
+        if(App::$kernel->cache && App::$kernel->cache->isCached('theme', $this->path_file, $this->content))
         {
             $this->cached = true;
             $this->content_string = file_to_string(App::$kernel->cache->retrieve('theme', $this->path_file));

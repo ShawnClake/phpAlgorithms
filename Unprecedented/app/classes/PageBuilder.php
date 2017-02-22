@@ -57,11 +57,16 @@ class PageBuilder extends StaticFactory
     {
         if(isset(self::$page->representation))
         {
-            self::$page->content = $this->preprocessor();
+            if(!self::$page->retrieveIfCached())
+            {
+                self::$page->content = $this->preprocessor();
 
-            self::$page->content = $this->assembler();
-            //var_dump(self::$page->content);
-            self::$page->content = $this->processor();
+                self::$page->content = $this->assembler();
+                //var_dump(self::$page->content);
+                self::$page->content = $this->processor();
+
+                self::$page->cache();
+            }
         } else {
             self::$page->content = $this->routeNotFound();
         }

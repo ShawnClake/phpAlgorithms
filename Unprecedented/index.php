@@ -1,5 +1,7 @@
 <?php
 
+$start_time = microtime(true);
+
 require('app/Autoloader.php');
 
 /*
@@ -24,6 +26,10 @@ $app = App\App::make();
  */
 $app->route();
 
+$end_time = microtime(true);
+
+echo '<hr> Time: ' . bcsub($end_time, $start_time, 4) . '<br>';
+echo 'Memory (bytes): ' . memory_get_usage(true) . '<br>';
 /*$offset_path = '/Projects/phpAlgorithms/Unprecedented';
 
 $uri = urldecode(

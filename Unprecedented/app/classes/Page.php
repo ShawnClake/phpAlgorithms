@@ -21,6 +21,12 @@ class Page extends StaticFactory
     /** @var Representation */
     public $representation = null;
 
+    /** @var bool */
+    public $cached = false;
+
+    /** @var string */
+    public $md5 = '';
+
     /**
      * Factory
      * @param $routing
@@ -52,5 +58,24 @@ class Page extends StaticFactory
 
         }
     }
+
+    public function retrieveIfCached()
+    {
+        if(isset(App::$kernel->cache) && App::$kernel->cache->isCached('compiled_pages', $this->routing, file(fix_slashes($this->representation->path . $this->representation->path_file))))
+        {
+            $this->cached = true;
+            $this->content = file_to_string(App::$kernel->cache->retrieve('compiled_pages', $this->routing));
+            return true;
+        }
+
+        return false;
+    }
+
+    public function cache()
+    {
+        if(App::$kernel->cache)
+            App::$kernel->cache->store('compiled_pages', $this->routing, $this->content, md5(file_to_string(file(fix_slashes($this->representation->path . $this->representation->path_file)))));
+    }
+
 
 }

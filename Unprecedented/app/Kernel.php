@@ -137,7 +137,8 @@ class Kernel extends StaticFactory
         if($cache = App::$config->get('cache', 'driver'))
         {
             $cache = 'App\\Drivers\\Cache\\' . $cache;
-            $this->cache = $cache::boot();
+            if(class_exists($cache))
+                $this->cache = $cache::boot();
         }
 
 

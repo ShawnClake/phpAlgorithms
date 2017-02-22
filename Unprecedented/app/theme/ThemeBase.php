@@ -359,7 +359,8 @@ abstract class ThemeBase
                     self::$representations['layouts'][$key]->content_string = $callback($layout->getContentString());
                 }
 
-                App::$kernel->cache->store('theme', $layout->path_file, self::$representations['layouts'][$key]->content_string, $layout->md5);
+                if(App::$kernel->cache)
+                    App::$kernel->cache->store('theme', $layout->path_file, self::$representations['layouts'][$key]->content_string, $layout->md5);
             }
         }
 
@@ -389,7 +390,8 @@ abstract class ThemeBase
                 $content_string = "{% extends '" . trim($layout) . "' %} \n {% block page %} \n " . $content_string . " \n {% endblock %}";
                 self::$representations['pages'][$key]->content_string = $content_string;
 
-                App::$kernel->cache->store('theme', $page->path_file, self::$representations['pages'][$key]->content_string, $page->md5);
+                if(App::$kernel->cache)
+                    App::$kernel->cache->store('theme', $page->path_file, self::$representations['pages'][$key]->content_string, $page->md5);
             }
         }
 
@@ -410,7 +412,8 @@ abstract class ThemeBase
                 if($partial->getSetting('md'))
                     self::$representations['partials'][$key]->content_string = $callback($partial->getContentString());
 
-                App::$kernel->cache->store('theme', $partial->path_file, self::$representations['partials'][$key]->content_string, $partial->md5);
+                if(App::$kernel->cache)
+                    App::$kernel->cache->store('theme', $partial->path_file, self::$representations['partials'][$key]->content_string, $partial->md5);
             }
         }
 
@@ -431,7 +434,8 @@ abstract class ThemeBase
                 if($snippet->getSetting('md'))
                     self::$representations['snippets'][$key]->content_string = $callback($snippet->getContentString());
 
-                App::$kernel->cache->store('theme', $snippet->path_file, self::$representations['snippets'][$key]->content_string, $snippet->md5);
+                if(App::$kernel->cache)
+                    App::$kernel->cache->store('theme', $snippet->path_file, self::$representations['snippets'][$key]->content_string, $snippet->md5);
             }
         }
     }
